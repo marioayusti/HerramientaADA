@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Maxsearch</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+        var init = function () {
+
+            var stage = new inalan.Stage("myCanvas");
+            stage.showAllButtons();
+
+            var max = new inalan.VisuVariable("max", 0, false);
+            max.x = 45;
+            max.y = 220;
+            stage.add(max, "max");
+
+            var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0, 0, 0], true);
+            a.setMinValue(5);
+            a.randomize(30, 150);
+            a.x = 100;
+            a.y = 220;
+            stage.add(a, "a");
+
+            var label = new inalan.VisuLabel(["This animation shows how to find the maximum in an array. In the beginning, we copy the first element",
+                                          "of the array to the maximum. Next, we compare the maximum with every other element in the array.",
+                                          "If any of the compared element in the array is bigger than the maximum, we copy it to the maximum."]);
+            label.x = 30;
+            label.y = 330;
+            stage.add(label, "label");
+
+            var c = new inalan.VisuCode(["max = a[0]",
+                                         "FOR i = 1 to 6",
+                                         "   IF max < a[i] THEN",
+                                         "      max = a[i]"]);
+            c.x = 360;
+            c.y = 70;
+            stage.add(c, "code");
+
+            // **********************************************
+
+            // global vars used in functions (for undo function need to be stored in stage.var object) ...
+            stage.vars.index = 0;
+
+            // functions (steps of the animation) ...
+            var findMaxFirstStep = function () {
+                stage.get("code").selected = [0];
+                stage.copy(stage.get("a")[0], stage.get("max"));
+            }
+
+            var findMaxIncrease = function () {
+                stage.vars.index++;
+                stage.get("a").setIndex("i", stage.vars.index);
+                stage.get("a").setLoopMarker("i", 1, 6);
+                if (findMaxCheck()) {
+                    stage.get("code").selected = [1];
+                    return 200;
+                } else {
+                    return 0;
+                }
+            }
+
+            var findMaxCompare = function () {
+                stage.get("code").selected = [2];
+                stage.compare(stage.get("max"), stage.get("a")[stage.vars.index]);
+            }
+
+            var findMaxCopy = function () {
+                if (stage.get("max").value < stage.get("a")[stage.vars.index].value) {
+                    stage.get("code").selected = [3];
+                    stage.copy(stage.get("a")[stage.vars.index], stage.get("max"));
+                } else {
+                    return 0;
+                }
+            }
+
+            var findMaxCheck = function () {
+                return stage.vars.index < stage.get("a").length;
+            }
+
+            var findMaxFinalStep = function () {
+                stage.get("code").selected = [];
+                stage.get("a").deleteIndex("i");
+            }
+
+            // defining steps in animation...
+            stage.setSteps([
+                findMaxFirstStep,
+                findMaxIncrease,
+                [findMaxCompare, findMaxCopy, findMaxIncrease], findMaxCheck,
+                findMaxFinalStep
+            ]);
+
+        }
+
+    </script>
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="480" style="border:1px solid black"></canvas>
+
+</body>
+</html>

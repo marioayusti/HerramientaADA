@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Arraysum</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+        var init = function () {
+
+            var stage = new inalan.Stage("myCanvas");
+            stage.showAllButtons();
+
+            var sum = new inalan.VisuVariable("sum", 0, false);            
+            sum.x = 100;
+            sum.y = 220;
+            stage.add(sum, "sum");
+            
+            var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0], true);
+            a.setMinValue(5);
+            a.setMaxValue(40);
+            a.setHeight(40);
+            a.randomize(5, 40);
+            a.x = 160;
+            a.y = 220;
+            stage.add(a, "a");
+
+            var label = new inalan.VisuLabel(["This animation shows how to sum numbers in an array. In the beginning the value of the sum",
+                                              "variable is zero. We add the value of every element to the sum to get the sum of numbers."]);
+            label.x = 30;
+            label.y = 330;
+            stage.add(label, "label")
+
+            var c = new inalan.VisuCode(["sum = 0",
+                                         "FOR i = 0 to 4",
+                                         "   sum = sum + a[i]"]);
+            c.x = 360;
+            c.y = 150;
+            stage.add(c, "code"); // in code we can refer to is with id = "code"
+
+            // **********************************************
+
+            // global vars used in functions (for undo function need to be stored in stage.var object) ...
+            stage.vars.index = 0;
+
+            // functions (steps of the animation) ...
+            var sumStep1 = function () {
+                stage.get("code").selected = [0];
+                return 200;
+            }
+
+            var sumStep2 = function () {
+                stage.get("code").selected = [1];
+                stage.get("a").setIndex("i", stage.vars.index);
+                stage.get("a").setLoopMarker("i", 0, 4);
+                return 200;
+            }
+
+            var sumAdd = function () {
+                stage.get("code").selected = [2];
+                stage.sum(stage.get("a")[stage.vars.index], stage.get("sum"));
+            }
+
+            var sumIncrease = function () {
+                stage.vars.index++;
+                stage.get("a").setIndex("i", stage.vars.index);
+                if (sumCheck()) {
+                    stage.get("code").selected = [1];
+                    return 200;
+                } else {
+                    return 0;
+                }
+            }
+
+            var sumCheck = function () {
+                return stage.vars.index < stage.get("a").length;
+            }
+
+            var sumFinalStep = function () {
+                stage.get("code").selected = [];
+                stage.get("a").deleteIndex("i");
+            }
+
+            // defining steps in animation...
+            stage.setSteps([
+                sumStep1,
+                sumStep2,
+                [sumAdd, sumIncrease], sumCheck,
+                sumFinalStep
+            ]);
+
+        }
+
+    </script>
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="480" style="border:1px solid black"></canvas>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+/*--- Algoritmo de ordenamiento por selección (SelectionSort) */
+
+procedure SelectionSort(ES int[] A)
+var
+int i, j, minIndex
+{
+    for i <- 1 to A.len - 1 do
+        minIndex <- i
+        for j <- i + 1 to A.len do 
+            if (A[j] < A[minIndex]) then
+                minIndex <- j
+            endif
+        endfor
+        if (minIndex != i) then 
+            swap(A[i], A[minIndex])
+        endif
+    endfor
+}
+
+procedure main()
+var
+int[9] A <- [100,24,23,4,5,6,7,8,9] // Ingresar el arreglo
+{
+    SelectionSort(A)
+}

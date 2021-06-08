@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Mirroring</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+        var init = function () {
+
+            var stage = new inalan.Stage("myCanvas");
+            stage.showAllButtons();
+
+            var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0, 0, 0, 0], true);
+            a.setMinValue(5);
+            a.randomize(30, 150);
+            a.x = 80;
+            a.y = 220;
+            stage.add(a, "a");
+
+            var label = new inalan.VisuLabel(["This simple animation shows how to mirror the elements in an array."]);
+            label.x = 30;
+            label.y = 330;
+            stage.add(label, "label")
+
+            var c = new inalan.VisuCode(["FOR i = 0 to 3",
+                                         "   swap a[i] a[7-i]"]);
+            c.x = 360;
+            c.y = 80;
+            stage.add(c, "code"); // in code we can refer to is with id = "code"
+
+            // **********************************************            
+
+            stage.vars.i = 0;
+
+            var line0 = function () {
+                stage.get("code").selected = [0];
+                stage.get("a").setIndex("i", stage.vars.i);
+                stage.get("a").setLoopMarker("i", 0, 3);
+                return 200;
+            }
+
+            var line1 = function () {
+                stage.get("code").selected = [1];
+                stage.get("a").setIndex("7-i", 7 - stage.vars.i);
+                stage.swap(stage.get("a")[stage.vars.i], stage.get("a")[7-stage.vars.i]);
+            }
+            
+            var incI = function () {
+                stage.get("a").deleteIndex("7-i");
+                stage.get("a")[stage.vars.i].setGreenColor();
+                stage.get("a")[7-stage.vars.i].setGreenColor();
+                stage.vars.i++;
+                return 0;
+            }
+
+            var checkI = function () {
+                return stage.vars.i <= 3;
+            }
+
+            var finalStep = function () {
+                stage.get("code").selected = [];                
+                stage.get("a").deleteIndex("i");
+                stage.get("a").deleteIndex("7-i");
+            }
+
+            // defining steps in animation...
+            stage.setSteps([
+                [
+                    line0,
+                    line1,
+                    incI
+                ], checkI,
+                finalStep
+            ]);
+
+        }
+
+    </script>
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="440" style="border:1px solid black"></canvas>
+
+</body>
+</html>

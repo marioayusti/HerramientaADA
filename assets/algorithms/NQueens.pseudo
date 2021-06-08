@@ -1,0 +1,44 @@
+/*Algoritmo para resolver el problema de las N Reinas del ajedrez*/
+function boolean verificar(ES int[] Reinas,E int k)
+var
+int i
+boolean resVerificar
+{
+    for i <- 0 to k - 1 do
+        if ((Reinas[i] == Reinas[k]) or (abs(k - i) == abs(Reinas[k] - Reinas[i]))) then
+            resVerificar <- false
+            break
+        endif
+    endfor
+    return resVerificar
+}
+
+
+function boolean NQueens(ES int[] Reinas,E int k)
+var
+int n <- Reinas.len
+boolean ok, verificar
+{
+    if (k == n) then
+        ok <- true
+    else        
+        while ((Reinas[k] < n - 1) and not ok) do
+            Reinas[k] <- Reinas[k] + 1
+            verificar <- verificar(Reinas, k)
+            if (verificar) then
+                ok <- NQueens(Reinas, k + 1)
+            endif
+        endwhile
+    endif
+    
+    return ok
+}
+
+procedure main()
+var
+int[4] Reinas <- [0,0,0,0] // Ingresar el arreglo
+boolean tieneSolucion
+{
+    tieneSolucion <- NQueens(Reinas, 1)
+    print(Reinas)
+}

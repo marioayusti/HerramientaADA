@@ -1,0 +1,23 @@
+/*Algoritmo de ordenamiento de burbuja (Bubblesort)*/
+
+procedure BubbleSort(ES int[] A)
+var
+int i,j
+showvars A, i, j
+{
+    for i <- 1 to A.len do 
+        for j <- 1 to A.len - i do 
+            if (A[j] > A[j + 1]) then
+                swap(A[j], A[j + 1])
+            endif
+        endfor
+    endfor
+}
+
+procedure main()
+var
+int[4] A <- [10, 24, 3, 4] // Ingresar el arreglo
+showvars
+{
+    BubbleSort(A)
+}

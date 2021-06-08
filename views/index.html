@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Herramienta Didáctica ADA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Aleo" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../assets/libs/katex/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/alertify.min.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/alertifyThemeDefault.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/alertifyThemeBootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/css/estilos.css" />
+
+    <script src="../assets/libs/katex/katex.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/popper.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/alertify.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/ace.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/ext-language_tools.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/peg.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/main.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/UIController.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/variablesDHTML.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/counter.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/fileManager.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/algorithmGame.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+    <div class="container-fluid p-0">
+        <header id="headerBar" class="row no-gutters d-flex justify-content-between border-bottom">
+            <h3 class="align-self-center ml-1 mb-0">Herramienta Didáctica ADA</h3>
+            <button id="btnDoc" type="button" class="btn btn-outline-light mr-1 mt-1 mb-1" data-toggle="modal"
+                data-target=".gramaticaModal">Gramática&nbsp;&nbsp;<i class="fas fa-book"></i></button>
+        </header>
+        <nav id="configBar" class="navbar navbar-expand-lg navbar-light bg-light row no-gutters">
+            <div class="col">
+                <div id="estiloEditor" class="btn-group">
+                    <div type="button" class="btn btn-secondary">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only"></span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <h6 class="dropdown-header">Claro</h6>
+                        <a class="dropdown-item active" href="#" data-tema="chrome">Chrome</a>
+                        <a class="dropdown-item" href="#" data-tema="github">GitHub</a>
+                        <a class="dropdown-item" href="#" data-tema="textmate">TextMate</a>
+                        <a class="dropdown-item" href="#" data-tema="eclipse">Eclipse</a>
+                        <a class="dropdown-item" href="#" data-tema="sqlserver">SQL Server</a>
+                        <div class="dropdown-divider"></div>
+                        <h6 class="dropdown-header">Oscuro</h6>
+                        <a class="dropdown-item" href="#" data-tema="chaos">Chaos</a>
+                        <a class="dropdown-item" href="#" data-tema="cobalt">Cobalt</a>
+                        <a class="dropdown-item" href="#" data-tema="gob">Green on Black</a>
+                        <a class="dropdown-item" href="#" data-tema="monokai">Monokai</a>
+                        <a class="dropdown-item" href="#" data-tema="vibrant_ink">Vibrant Ink</a>
+                    </div>
+                </div>
+                <button id="btnUploadFile" type="button" class="btn btn-secondary ml-4"><i
+                        class="fas fa-file-upload"></i></button>
+                <button id="btnDownloadFile" type="button" class="btn btn-secondary ml-2"><i
+                        class="fas fa-save"></i></button>
+                <div id="examplesChooser" class="btn-group ml-4">
+                    <div type="button" class="btn btn-secondary">
+                        <span id="txtExampleDropdown">Ejemplos</span> <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <button type="button" class="btn btn-secondary dropdown-toggle dropdown-toggle-split"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="#" data-fname="BubbleSort.pseudo"
+                            data-nAlgorithm="1">BubbleSort</a>
+                        <a class="dropdown-item" href="#" data-fname="InsertionSort.pseudo"
+                            data-nAlgorithm="2">InsertionSort</a>
+                        <a class="dropdown-item" href="#" data-fname="SelectionSort.pseudo"
+                            data-nAlgorithm="3">SelectionSort</a>
+                        <a class="dropdown-item" href="#" data-fname="BinarySearch.pseudo"
+                            data-nAlgorithm="4">BinarySearch</a>
+                        <a class="dropdown-item" href="#" data-fname="MergeSort.pseudo"
+                            data-nAlgorithm="5">MergeSort</a>
+                        <a class="dropdown-item" href="#" data-fname="Quicksort.pseudo"
+                            data-nAlgorithm="6">Quicksort</a>
+                        <a class="dropdown-item" href="#" data-fname="MinYMax.pseudo" data-nAlgorithm="7">Min&Max</a>
+                        <a class="dropdown-item" href="#" data-fname="TowerOfHanio.pseudo"
+                            data-nAlgorithm="8">TowerOfHanio</a>
+                        <a class="dropdown-item" href="#" data-fname="KnightsTour.pseudo" data-nAlgorithm="9">Knight's
+                            Tour</a>
+                        <a class="dropdown-item" href="#" data-fname="NQueens.pseudo" data-nAlgorithm="10">N-Queens</a>
+                    </div>
+                </div>
+                <button id="btnEditExample" type="button" class="btn btn-secondary ml-2" style="display: none;">
+                    <span id="btnEditExampleTxt"></span>&nbsp;<span><i class="far fa-edit"></i></span>
+                </button>
+                <div class="custom-control custom-switch d-inline-flex align-middle ml-4">
+                    <input type="checkbox" class="custom-control-input" id="checkVisualizer">
+                    <label class="custom-control-label" for="checkVisualizer">Visualización de Variables</label>
+                </div>
+                <input id="fileURLInput" type="file" accept=".txt,.pseudo" hidden>
+            </div>
+            <button id="btnGame" class="btn btn-primary align-self-end mr-3" type="button">Modo Juego</button>
+            <button id="btnRun" class="btn btn-primary align-self-end" type="button">Ejecutar</button>
+        </nav>
+        <div id="containerApp" class="row no-gutters">
+            <div id="editorContainer" class="col-lg">
+                <div id="editor">//Comienza a escribir tu código aquí..</div>
+            </div>
+            <div id="gameCointainer" class="col-lg border-left" style="max-width:50%; display: none;">
+                <div id="containerGameMenu" style="display: none;">
+                    <h3 class="titleRowApp mb-0">¡Empezar el Juego!</h3>
+                    <div class="d-flex justify-content-center">
+                        <button id="btnStartGame" class="d-block mt-5 btn btn-primary btn-lg">¡Primera
+                            Pregunta!&nbsp;<i class="fas fa-question"></i></button>
+                    </div>
+                </div>
+                <div id="containerGameTree" class="" style="display: none;">
+                    <h3 class="titleRowApp w-100">Creación del Árbol de Ambientes: <span><button id="btnCheckTrees"
+                                class="btn btn-light">Comparar</button></span></h3>
+                    <div class="embed-responsive">
+                        <iframe id="iframeGameTree" class="embed-responsive-item h-100"
+                            src="./gameTreeView.html"></iframe>
+                    </div>
+                </div>
+                <div id="containerGameIterative" style="display: none;">
+                    <h3 class="titleRowApp mb-0">Conteo línea a línea</h3>
+                    <div class="d-flex justify-content-center p-5">
+                        <div class="input-group mt-5">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Línea&nbsp;<span id="actLineGame"></span> :</span>
+                            </div>
+                            <input id="inputLineGame" type="number" class="form-control"
+                                placeholder="¿Número de Veces?">
+                            <div class="input-group-append">
+                                <button id="btnNextLineGame" class="btn btn-outline-secondary">Siguiente <i
+                                        class="fas fa-forward"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="containerGameInfo">
+                    <h5 class="mb-0">Puntaje</h5>
+                    <div class="progress">
+                        <div id="pointsBar" class="progress-bar" role="progressbar" style="width: 200%;"
+                            aria-valuenow="25" aria-valuemin="0" aria-valuemax="5">1</div>
+                    </div>
+                    <h5 class="mb-0">Intentos Disponibles:</h5>
+                    <div id="attemptsContainer">
+                    </div>
+                </div>
+                <div id="containerGameComplexity">
+                    <h3 class="titleRowApp mb-0">Complejidad del Algoritmo</h3>
+                    <br>
+                    <div style="text-align: center">
+                        <p class="textFormComplex"><b>Algoritmo:</b> <span id="nameAlgSelected"></span></p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                Mejor Caso:
+                                <div id="bestCaseOptions" class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <span id="txtOpcionsBest">Opciones</span>
+                                    </button>
+                                    <div class="dropdown-menu" id="bestCaseOptionsItems"
+                                        aria-labelledby="dropdownMenuButton"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                Peor Caso:
+                                <div id="worstCaseOptions" class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button"
+                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                        aria-expanded="false">
+                                        <span id="txtOpcionsWorst">Opciones</span>
+                                    </button>
+                                    <div class="dropdown-menu" id="worstCaseOptionsItems"
+                                        aria-labelledby="dropdownMenuButton"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button id="btnCheckComplexity" class="d-block mt-5 btn btn-primary btn-lg">¡Validar!&nbsp;<i
+                                class="fas fa-check"></i></button>
+                    </div>
+                </div>
+                <div id="hubGameOptions" class="row no-gutters">
+                    <div class="col-md">
+                        <div class="row no-gutters justify-content-center">
+                            <button id="btnStopGame" class="btn btn-danger m-0" type="button">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="viewerCointainer" class="col-lg border-left" style="max-width:50%; display: none;">
+                <div id="containerVisualizer" class="row no-gutters">
+                    <h3 class="titleRowApp w-100">Visualización Dinámica</h3>
+                    <div class="embed-responsive">
+                        <iframe id="iframeVisualizer" class="embed-responsive-item h-100"
+                            src="./visualizer.html"></iframe>
+                    </div>
+                </div>
+                <div id="containerTree" class="row no-gutters">
+                    <h3 class="titleRowApp w-100">Árbol de Ambientes</h3>
+                    <div class="embed-responsive">
+                        <iframe id="iframeTree" class="embed-responsive-item h-100" src="./treeView.html"></iframe>
+                    </div>
+                </div>
+                <div id="containerVariables" class="table-responsive row no-gutters" style="display: none;">
+                    <h3 class="titleRowApp mb-0 w-100">Todas las Variables</h3>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr class="theadVars border-bottom border-top">
+                                <th class="col-2" scope="col">Nombre</th>
+                                <th class="col-3" scope="col">Tipo</th>
+                                <th class="col-7" scope="col">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyGlobalVars">
+                            <tr>
+                                <th colspan="3" class="text-center theadVars border-bottom">Globales</th>
+                            </tr>
+                        </tbody>
+                        <tbody id="tbodyLocalVars">
+                            <tr>
+                                <th colspan="3" class="text-center theadVars border-bottom">Locales (<span
+                                        id="titleActSubprogram"></span>)</th>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="containerBreakPoints" class="table-responsive" style="display: none;">
+                    <h3 class="titleRowApp mb-0">Puntos de Ruptura</h3>
+                    <table class="table table-sm table-hover">
+                        <thead>
+                            <tr class="theadVars border-bottom border-top">
+                                <th scope="col">Línea</th>
+                                <th scope="col">Número de Veces Ejecutado</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyBreakPoints">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="containerSideBtns" class="mt-5" style="display: none;">
+                <div class="tab btnTabVisualization mt-1">
+                    <i class="fab fa-stack-overflow border-right mr-1"></i>
+                    <div class="custom-control custom-switch d-inline-flex">
+                        <input type="checkbox" class="custom-control-input" id="btnShowVisualizer" data-tab="1">
+                        <label class="custom-control-label" for="btnShowVisualizer">Dinámicas</label>
+                    </div>
+                </div>
+                <div class="tab btnTabVisualization mt-1">
+                    <i class="fas fa-share-alt border-right mr-1"></i>
+                    <div class="custom-control custom-switch d-inline-flex">
+                        <input type="checkbox" class="custom-control-input" id="btnShowTree" data-tab="2">
+                        <label class="custom-control-label" for="btnShowTree">Árbol</label>
+                    </div>
+                </div>
+                <div class="tab btnTabVisualization mt-1 disabled">
+                    <i class="fas fa-list-ul border-right mr-1"></i>
+                    <div class="custom-control custom-switch d-inline-flex">
+                        <input type="checkbox" class="custom-control-input" id="btnShowVars" data-tab="3">
+                        <label class="custom-control-label" for="btnShowVars">Variables</label>
+                    </div>
+                </div>
+                <div class="tab btnTabVisualization mt-1 disabled" style="display:none;">
+                    <i class="fas fa-star border-right mr-1"></i>
+                    <div class="custom-control custom-switch d-inline-flex">
+                        <input type="checkbox" class="custom-control-input" id="btnBreakpoints" data-tab="4">
+                        <label class="custom-control-label" for="btnBreakpoints">BreakPoints</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="hubExecutionControllerContainer" style="display:none;" class="row no-gutters">
+            <div class="col-md">
+                <div class="row no-gutters flex-row-reverse">
+                    <button id="btnStop" class="btn btn-danger mr-3" type="button">
+                        <i class="fas fa-stop"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="executionBtns" class="col-md-2">
+                <div class="row d-flex flex-nowrap justify-content-md-center">
+                    <button id="btnBackStep" class="btn btn-secondary" type="button">
+                        <i class="fas fa-backward"></i>
+                    </button>
+                    <button id="btnPlay" class="btn btn-secondary ml-2 mr-2" type="button">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="btnNextStep" class="btn btn-secondary" type="button">
+                        <i class="fas fa-forward"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md">
+                <div id="spdSelector" class="btn-group dropup" style="display: none;">
+                    <div type="button" class="btn btn-secondary">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        normal
+                    </button>
+                    <div class="dropdown-menu">
+                        <h6 class="dropdown-header">Velocidad</h6>
+                        <a class="dropdown-item" href="#" data-vel="0.25">0.25</a>
+                        <a class="dropdown-item" href="#" data-vel="0.5">0.5</a>
+                        <a class="dropdown-item" href="#" data-vel="0.75">0.75</a>
+                        <a class="dropdown-item active" href="#" data-vel="1">normal</a>
+                        <a class="dropdown-item" href="#" data-vel="1.25">1.25</a>
+                        <a class="dropdown-item" href="#" data-vel="1.5">1.5</a>
+                        <a class="dropdown-item" href="#" data-vel="2">2</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal de documento -->
+        <div class="modal fade gramaticaModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">Gramática de la Herramienta ADA</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body p-0">
+                        <div id="editorGramaticaContainer" class="row no-gutters">
+                            <div class="col-lg">
+                                <div id="editorGramatica"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

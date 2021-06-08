@@ -1,0 +1,36 @@
+function int binarySearch(E int[] A, E int x)
+var
+int ini, fin, pos, mitad
+{
+    ini <- 1
+    fin <- A.len
+    pos <- -1
+    
+    while (pos == -1 and ini <= fin) do
+        mitad <- piso((ini + fin)/2)
+        if (A[mitad] == x) then
+            pos <- mitad
+        else
+            if (A[mitad] > x) then
+                fin <- mitad - 1
+            else
+                ini <- mitad + 1
+            endif
+        endif
+    endwhile
+    
+    return pos
+}
+
+procedure main() 
+var
+int[9] A <- [0, 1, 2, 8, 13, 17, 19, 32, 42]
+int res
+{
+    res <- binarySearch(A, 187)
+    if (res > -1) then 
+        show("El elemento está en la posición: " + res)
+    else
+        show("El elemento no se encuentra en el arreglo")    
+    endif
+}

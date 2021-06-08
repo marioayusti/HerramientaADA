@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Swapping</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+        var init = function () {
+
+            var stage = new inalan.Stage("myCanvas");
+
+            var a = new inalan.VisuVariable("a", 0, true);
+            a.randomize(30,150);
+            a.x = 120;
+            a.y = 220;
+            stage.add(a, "a");
+
+            var b = new inalan.VisuVariable("b", 0, true);
+            b.randomize(30,150);
+            b.x = 160;
+            b.y = 220;
+            stage.add(b, "b");
+
+            var tmp = new inalan.VisuVariable("tmp", 0, false);
+            tmp.x = 280;
+            tmp.y = 220;
+            stage.add(tmp, "tmp");
+
+            var label = new inalan.VisuLabel(["This animation shows how to swap the value of two variables (a,b) using a third variable (tmp)."]);
+            label.x = 30;
+            label.y = 270;
+            stage.add(label, "label");
+
+            var c = new inalan.VisuCode(["tmp = a",
+                                         "a = b",
+                                         "b = tmp"]);
+            c.x = 430;
+            c.y = 100;
+            stage.add(c, "code");
+
+            // **********************************************
+
+            // functions (steps of the animation) ...
+            var step1 = function () {
+                stage.get("code").selected = [0];
+                stage.move(stage.get("a"), stage.get("tmp"));
+            }
+
+            var step2 = function () {
+                stage.get("code").selected = [1];
+                stage.move(stage.get("b"), stage.get("a"));
+            }
+
+            var step3 = function () {
+                stage.get("code").selected = [2];
+                stage.move(stage.get("tmp"), stage.get("b"));
+            }
+
+            var step4 = function () {                
+                stage.get("code").selected = [];
+            }
+
+            // defining steps in animation...
+            stage.setSteps([
+                step1,
+                step2,
+                step3,
+                step4
+            ]);
+
+        }
+
+    </script>
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="390" style="border:1px solid black"></canvas>
+
+</body>
+</html>

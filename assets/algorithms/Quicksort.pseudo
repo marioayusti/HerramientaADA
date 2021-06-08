@@ -1,0 +1,36 @@
+/*Algoritmo de ordenamiento rápido (QuickSort)*/
+
+function int Partition(ES int[] A, E int low, E int high)
+var
+int i,j,pivot
+{
+    pivot <- A[high]
+    i <- low
+    for j <- low to high - 1 do
+        if (A[j] < pivot) then
+            swap(A[i], A[j])
+            i <- i + 1
+        endif
+    endfor
+    swap(A[i], A[high])
+    return i
+}
+
+
+procedure QuickSort(ES int[] A, E int low, E int high)
+var
+int pi
+{
+    if (low < high) then
+        pi <- Partition(A, low, high)
+        QuickSort(A, low, pi - 1)
+        QuickSort(A, pi + 1, high)
+    endif
+}
+
+procedure main()
+var
+int[4] A <- [10, 24, 3, 4] // Ingresar el arreglo
+{
+    QuickSort(A, 1, A.len)
+}

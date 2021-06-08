@@ -1,0 +1,270 @@
+html,
+body {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#overlay {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+}
+
+#headerBar {
+    width: 100%;
+    height: 50px;
+    background-color: #cf000f;
+    color: #fff;
+}
+
+button,
+.dropdown-menu {
+    font-family: 'Aleo', serif;
+}
+
+#headerBar h3 {
+    font-family: 'Source Sans Pro', sans-serif;
+}
+
+#containerGameTree div,
+#containerTree div,
+#containerVisualizer div {
+    height: 540px;
+    padding: 0px;
+}
+
+#containerVariables,
+#containerGameTree,
+#containerGameMenu,
+#viewerCointainer,
+#gameCointainer,
+#containerTree,
+#containerVisualizer {
+    height: 600px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.titleRowApp {
+    color: #FFFFFF;
+    background-color: #cf000f;
+    text-align: center;
+    padding: 10px 0px 10px 0px;
+    margin: 0px;
+    height: 55px;
+}
+
+#containerVariables .theadVars {
+    color: #FFFFFF;
+    background-color: #cf000f;
+}
+
+#editor {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 16px;
+}
+
+#containerSideBtns {
+    position: fixed;
+    right: -150px;
+    z-index: 1049;
+}
+
+.btnTabVisualization {
+    position: relative;
+    width: 190px;
+    padding: 5px 10px 5px 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: #cf000f;
+    color: #fff;
+    opacity: 1;
+}
+
+.tab.disabled {
+    background-color: gray;
+}
+
+.btnTabVisualization i {
+    width: 35px;
+    font-size: 24px;
+}
+
+.btnTabVisualization span {
+    width: 155px;
+}
+
+.btnTabVisualization:hover {
+    left: -130px;
+    cursor: pointer;
+}
+
+#hubExecutionControllerContainer {
+    position: fixed;
+    bottom: 1px;
+    left: 0px;
+    width: 100vw;
+    z-index: 1049;
+}
+
+#hubGameOptions {
+    position: fixed;
+    bottom: 1px;
+    left: 0px;
+    width: 100vw;
+    z-index: 1059;
+}
+
+#btnStopGame {
+    opacity: 0.5;
+}
+
+#btnStopGame:hover {
+    opacity: 1;
+}
+
+.ace_selected_line {
+    position: absolute;
+    background-color: rgba(242, 38, 19, 0.5);
+    ;
+}
+
+.ace_selected_gutter {
+    background-color: rgba(242, 38, 19, 0.5);
+    background-image: url("../images/arrow-right-icon.png");
+    background-size: 25% 100%;
+}
+
+.ace_breakpoint_gutter {
+    color: rgba(52, 152, 219, 1);
+}
+
+.ace_breakpoint_line {
+    position: absolute;
+    background-color: rgba(52, 152, 219, 1);
+}
+
+.ace_underline_error {
+    position: absolute;
+    border-bottom: 1px solid red;
+}
+
+.dropdown-menu>a:not(.active):hover {
+    background-color: #E0E0E0;
+}
+
+#containerGameInfo {
+    position: fixed;
+    right: 5px;
+    bottom: 10px;
+    width: 250px;
+    height: 100px;
+    z-index: 2000;
+}
+
+/* 
+-------------------------- 
+Alertify 
+-------------------------- 
+*/
+
+.ajs-content p {
+    margin: 0;
+    font-size: 20px;
+}
+
+.ajs-content {
+    margin: 0;
+    max-height: 70vh;
+    padding: 15px 24px 15px 24px !important;
+    overflow-y: auto;
+}
+
+.alertify .ajs-header {
+    border-bottom: none;
+}
+
+.alertify .ajs-footer {
+    border-top: none;
+    display: -webkit-box !important;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    -webkit-box-pack: center !important;
+    -ms-flex-pack: center !important;
+    justify-content: center !important;
+}
+
+.btn-primario {
+    background-color: #22A7F0;
+    border: 0px;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.btn-primario:hover,
+.btn-secundario:hover {
+    border: 1px solid #424242;
+}
+
+.btn-secundario {
+    background-color: #6C7A89;
+    border: 0px;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 300;
+    padding: 5px;
+}
+
+.alertify-titulo-info {
+    margin: 0;
+    text-align: center;
+    color: #00B0FF;
+}
+
+.texto-advertencia {
+    color: #F9690E;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+.texto-errorSistema {
+    color: #E53935;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+.texto-info {
+    white-space: pre-wrap;
+    text-align: justify;
+    color: #424242;
+}
+
+.texto-exito {
+    text-align: center;
+    color: #26A65B;
+}
+
+.divMatrix {
+    width: 45%;
+    text-align: center;
+}
+
+.textFormComplex {
+    font-family: KaTeX_Math;
+    font-style: italic;
+    font-size: x-large;
+}

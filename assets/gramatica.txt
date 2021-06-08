@@ -1,0 +1,509 @@
+//---------- Instrucciones Básicas de la Gramática ----------
+
+- Los algoritmos que permite crear la herramienta ADA deben estar implementados bajo el paradigma de programación estructurada.
+
+- Tipo de datos: 
+  Se cuenta con 3 tipos de datos:
+  *Primitivos:
+    > Enteros: int
+    > Decimales: float
+    > Caracter: char
+    > Cadenas: string
+    > Lógico: boolean
+  *Arreglos:
+    > tipoDatoPrimitivo[]([])?
+  *Estructuras de Datos:
+    > Pilas: pila
+    > Colas: cola
+    > Listas: lista 
+
+- Existen dos tipos de subrutinas que podemos definir: procedure (procedimientos) y function (funciones)
+  *La estructura para definir los procedimientos es la siguiente:
+
+      procedure NombreDelProcedimiento([TipoParámetros TipoDato NombreParámetro, [TipoParámetros TipoDato NombreParámetro]...])
+      var
+      //Todas las variables locales va aquí
+      [tipoDato [nombreVariable1] [<- ValorInicial]]
+      [tipoDato [nombre1 [, nombre2, ..., nombreN]] [<- ValorInicial]] //Creación multiple de variables
+      ...
+      [tipoDato nombreVariableN [<- ValorInicial]]
+      showvars [Id, [Id]...] //(Opcional) Se colocan las variables que se quieren visualizar gráficamente sin necesidad de seleccionarlas en cada ambiente.
+      {
+        sentencia1
+        sentencia2
+        sentencia3
+        ...
+        sentenciaN
+      }
+
+  * Las funciones tienen una estructura similar a los procedimientos, deben retornar un valor, por eso es necesario definir:
+      > Tipo de dato a retornar
+      > Sentencia de retorno
+
+      function tipoDato NombreDelFunción([TipoParámetros TipoDato NombreParámetro, [TipoParámetros TipoDato NombreParámetro]...])
+      var
+      //Todas las variables locales va aquí
+      [tipoDato [nombreVariable1] [<- ValorInicial]]
+      [tipoDato [nombre1 [, nombre2, ..., nombreN]] [<- ValorInicial]] //Creación multiple de variables
+      ...
+      [tipoDato nombreVariableN [<- ValorInicial]]
+      showvars [Id, [Id]...] //(Opcional) Se colocan las variables que se quieren visualizar gráficamente sin necesidad de seleccionarlas en cada ambiente.
+      {
+        sentencia1
+        sentencia2
+        sentencia3
+        ...
+        sentenciaN
+
+        return expresionRetorno // Existe un solo punto de retorno en una función y está al final
+      }
+
+- Todo programa implementado debe tener una subrutina main, la cual es la primera que se ejecuta al empezar la ejecución. 
+  Puedes llamar a una subrutina con el nombre 'main' para que automáticamente se ejecute de primero, sino, debes seleccionarla al iniciar la ejecución. 
+
+- La expresiones se dividen segín el tipo de dato que retornan:
+  * Lógicas:
+      > Literales: true y false
+      > Relacionales: expresión operadorRelacional expresión
+        operadores relacionales: >, >=, <, <=
+      > Igualdad: expresiónLógica == expresiónLógica
+      > Diferencia: expresiónLógica != expresiónLógica
+      > Con operadores lógicos: expresiónLógica (and | or) expresiónLógica
+  
+  * Númericas:
+      > Literales: números negativos y positivos con o sin punto flotante
+      > Aritméticas: expresiónNumérica operadorAritmético expresiónNumérica
+        Operadores Aritméticos: +, -, *, /, %
+  
+  * Cadenas de texto:
+      > Literal: "texto"
+      > Concatenación: "texto1" + "texto2"
+  
+  * Carácteres:
+      > Literales: 'carácter'
+
+- Estructuras Condicionales:
+
+  IF:
+
+    if (condicion) then
+      sentencia1
+      sentencia2
+      ...
+      sentenciaN
+    else
+      sentencia1
+      sentencia2
+      ...
+      sentenciaN
+    endif
+
+  SWITCH:
+
+    case of [expresión]
+      [Literal1]:
+        sentencia1
+        sentencia2
+        ...
+        sentenciaN
+      [Litera2]:
+        sentencia1
+        sentencia2
+        ...
+        sentenciaN
+      ..
+      default:
+        sentencia1
+        sentencia2
+        ...
+        sentenciaN
+    endcase
+
+- Estructuras Iterativas:
+    
+    FOR:
+
+      for nombreVariable <- expresiónEntera (to | downto) expresiónEntera inc LiteralEntero do
+        sentencia1
+        sentencia2
+        ...
+        sentenciaN
+      endfor
+
+    WHILE:
+
+      while (condición) do
+        sentencia1
+        sentencia2
+        ...
+        sentenciaN
+      endwhile
+    
+    REPEAT:
+
+      repeat
+        sentencia1
+        sentencia2
+        ...
+        sentenciaN
+      until(condición)
+
+- Funciones útiles:
+
+    *Función de intercambio: 
+      > swap(nombreVariable, nombreVariable)
+
+    *Imprimir en consola:
+      > print(expresión)
+
+    *Mostrar en pantalla:
+      > show(expresión)    
+
+- Llamado a subrutinas:
+
+    nombreDeSubrutina(expresión [, expresión,...,expresión])
+
+
+
+//---------- Gramática Herramienta ADA ----------
+
+start -> __ VariableGlobalStatement? SubProgramDeclaration (_f SubProgramDeclaration)* __
+
+// ----- Léxico -----
+SourceCharacter -> .
+
+//Espacios
+__ -> (WhiteSpace | LineTerminator | Comment)*
+_f -> _ LineTerminator __
+_ -> (WhiteSpace | Comment)*
+
+WhiteSpace -> "\t" | "\v" | "\f" | " " | "\u00A0" | "\uFEFF"
+LineTerminator -> "\n" | "\r\n" | "\r" | "\u2028" | "\u2029" 
+
+//Comentarios
+Comment -> MultiLineComment | SingleLineComment
+MultiLineComment -> "/*" (!"*/" SourceCharacter)* "*/"
+SingleLineComment -> "//" (!LineTerminator SourceCharacter)*
+
+//Identificador
+Identifier -> !ReservedWord [A-Za-z] IdentifierPart*
+IdentifierPart -> [a-zA-Z0-9_]
+
+// Literales
+BooleanLiteral -> TrueToken | FalseToken
+InfinityLiteral -> [+]? InfinitoToken | [-] InfinitoToken
+NumericLiteral -> IntLiteral | FloatLiteral
+IntLiteral -> [+-]? DecimalIntegerLiteral !"." 
+FloatLiteral -> [+-]? DecimalIntegerLiteral "." DecimalDigit* | [+-]? "." DecimalDigit+
+DecimalIntegerLiteral -> "0" | NonZeroDigit DecimalDigit*
+DecimalDigit -> [0-9]
+NonZeroDigit -> [1-9]
+StringLiteral -> '"' DQString '"'
+DQString -> (!('"') SourceCharacter)*
+CharLiteral -> "'" SQChar "'"
+SQChar -> (!("'") SourceCharacter)?
+
+// Palabras Reservadas
+ReservedWord -> VarToken | IfToken | ThenToken | ElseToken | EndIfToken | CaseOfToken | DefaultToken | 
+  EndCaseToken | WhileToken | DoToken | EndWhileToken | RepeatToken | UntilToken | ForToken | 
+  ToToken | IncToken | DownToToken | EndForToken | FunctionToken | ProcedureToken | EntradaToken | 
+  SalidaToken | ESToken | IntToken | FloatToken | BooleanToken | CharToken | StringToken | 
+  TrueToken | FalseToken | PilaToken | ColaToken | ListaToken | NotToken | ReturnToken | 
+  PisoToken | TechoToken | InfinitoToken | PushToken | PopToken | PeekToken | EnqueueToken | 
+  DequeueToken | FrontToken | IsEmptyToken | LengthToken | SizeToken | SwapToken | PrintToken | 
+  ShowToken | CharAtToken | PowToken | SqrtToken | AddToken | AddFirstToken | AddLastToken | 
+  IndexToken | GetToken | GetFirstToken | GetLastToken | RemoveToken | RemoveIndexToken | RemoveFirstToken |
+  RemoveLastToken | ContainsToken | BreakToken | AbsoluteToken | SkipToken | ShowVarsToken
+
+// Tokens
+VarToken        -> "var"i           !IdentifierPart 
+IfToken         -> "if"i            !IdentifierPart
+ThenToken       -> "then"i          !IdentifierPart
+ElseToken       -> "else"i          !IdentifierPart
+EndIfToken      -> "endif"i         !IdentifierPart
+CaseOfToken     -> "case of"i       !IdentifierPart
+DefaultToken    -> "default"i       !IdentifierPart
+EndCaseToken    -> "endcase"i       !IdentifierPart
+WhileToken      -> "while"i         !IdentifierPart
+DoToken         -> "do"i            !IdentifierPart
+EndWhileToken   -> "endwhile"i      !IdentifierPart
+RepeatToken     -> "repeat"i        !IdentifierPart
+UntilToken      -> "until"i         !IdentifierPart
+ForToken        -> "for"i           !IdentifierPart
+ToToken         -> "to"i            !IdentifierPart 
+IncToken        -> "inc"i           !IdentifierPart 
+DownToToken     -> "downto"i        !IdentifierPart 
+EndForToken     -> "endfor"i        !IdentifierPart 
+FunctionToken   -> "function"i      !IdentifierPart 
+ProcedureToken  -> "procedure"i     !IdentifierPart 
+TrueToken       -> "true"i          !IdentifierPart 
+FalseToken      -> "false"i         !IdentifierPart 
+NotToken        -> "not"i           !IdentifierPart
+EntradaToken    -> "E"i             !IdentifierPart 
+SalidaToken     -> "S"i             !IdentifierPart 
+ESToken         -> "ES"i            !IdentifierPart 
+IntToken        -> "int"i           !IdentifierPart 
+FloatToken      -> "float"i         !IdentifierPart 
+BooleanToken    -> "boolean"i       !IdentifierPart 
+CharToken       -> "char"i          !IdentifierPart 
+StringToken     -> "string"i        !IdentifierPart  
+PilaToken       -> "pila"i          !IdentifierPart 
+ColaToken       -> "cola"i          !IdentifierPart 
+ListaToken      -> "lista"i         !IdentifierPart 
+ReturnToken     -> "return"i        !IdentifierPart 
+PisoToken       -> "piso"i          !IdentifierPart
+TechoToken      -> "techo"i         !IdentifierPart
+InfinitoToken   -> "infinito"i      !IdentifierPart
+PushToken       -> "push"i          !IdentifierPart
+PopToken        -> "pop"i           !IdentifierPart
+PeekToken       -> "peek"i          !IdentifierPart
+EnqueueToken    -> "enqueue"i       !IdentifierPart
+DequeueToken    -> "dequeue"i       !IdentifierPart
+FrontToken      -> "front"i         !IdentifierPart
+IsEmptyToken    -> "isempty"i       !IdentifierPart
+AddToken        -> "add"i           !IdentifierPart
+AddFirstToken   -> "addfirst"i      !IdentifierPart
+AddLastToken    -> "addlast"i       !IdentifierPart
+IndexToken      -> "indexof"i       !IdentifierPart
+GetToken        -> "get"i           !IdentifierPart
+GetFirstToken   -> "getfirst"i      !IdentifierPart
+GetLastToken    -> "getlast"i       !IdentifierPart
+RemoveToken     -> "remove"i        !IdentifierPart
+RemoveIndexToken-> "removeindex"i   !IdentifierPart
+RemoveFirstToken-> "removefirst"i   !IdentifierPart
+RemoveLastToken -> "removelast"i    !IdentifierPart
+ContainsToken   -> "contains"i      !IdentifierPart
+LengthToken     -> "len"i           !IdentifierPart
+SizeToken       -> "size"i          !IdentifierPart
+SwapToken       -> "swap"i          !IdentifierPart
+PrintToken      -> "print"i         !IdentifierPart
+ShowToken       -> "show"i          !IdentifierPart
+CharAtToken     -> "charat"i        !IdentifierPart
+PowToken        -> "pow"i           !IdentifierPart
+SqrtToken       -> "sqrt"i          !IdentifierPart
+BreakToken      -> "break"i         !IdentifierPart
+AbsoluteToken   -> "abs"i           !IdentifierPart
+SkipToken       -> "skip"i          !IdentifierPart
+ShowVarsToken   -> "showvars"i      !IdentifierPart
+
+PrimitiveTypesVar -> IntToken | FloatToken | BooleanToken | CharToken | StringToken
+
+TypesVar -> PrimitiveTypesVar ("[" "]" ("[" "]")?)? 
+  | PilaToken "<" _ PrimitiveTypesVar _ ">" 
+  | ColaToken "<" _ PrimitiveTypesVar _ ">" 
+  | ListaToken "<" _ PrimitiveTypesVar _ ">"    
+
+ModePar -> EntradaToken | SalidaToken | ESToken
+
+// ----- Expresiones -----
+Expression -> CharExpression | StringExpression | NumericExpression | BooleanExpression | ExpressionNoPrimitive
+ExpressionNoPrimitive -> VariableAccessExpression
+
+//Llamado a Variables
+VariableAccessExpression -> ExistingVariable (!"[" | ArrayIndex)
+ExistingVariable -> Identifier !"(" 
+
+//Variables por su tipo
+IntVariable -> VariableAccessExpression !"." 
+FloatVariable -> VariableAccessExpression !"." 
+BooleanVariable -> VariableAccessExpression !"." 
+StringVariable -> VariableAccessExpression !"." 
+CharVariable -> VariableAccessExpression !"." 
+PopExpression -> StackVariableAccessExpression  "." PopToken 
+
+//Funciones de estructuras de datos
+PeekExpression ->  StackVariableAccessExpression "." PeekToken 
+DequeueExpression -> QueueVariableAccessExpression "." DequeueToken
+FrontExpression -> QueueVariableAccessExpression "." FrontToken
+RemoveElementByIndexExpression -> ListVariableAccessExpression "." RemoveIndexToken "(" IntExpression ")" 
+RemoveElementExpression -> ListVariableAccessExpression "." RemoveToken "(" Expression ")"
+RemoveFirstExpression -> ListVariableAccessExpression  "." RemoveFirstToken 
+RemoveLastExpression -> ListVariableAccessExpression  "." RemoveLastToken 
+GetElementByIndexExpression -> ListVariableAccessExpression  "." GetToken "(" IntExpression ")" 
+GetFirstExpression -> ListVariableAccessExpression  "." GetFirstToken 
+GetLastExpression -> ListVariableAccessExpression  "." GetLastToken 
+GettingListExpression -> GetElementByIndexExpression | GetFirstExpression | GetLastExpression
+RemovalListExpression -> RemoveElementByIndexExpression | RemoveElementExpression | RemoveFirstExpression | RemoveLastExpression
+GettingStackExpression -> PopExpression | PeekExpression
+GettingQueueExpression -> DequeueExpression | FrontExpression
+
+//Expresiones según su tipo
+DataStructuresFunctions -> GettingListExpression | RemovalListExpression | GettingStackExpression | GettingQueueExpression
+CharDataStructure -> DSF:DataStructuresFunctions
+StringDataStructure -> DSF:DataStructuresFunctions
+BooleanDataStructure -> DSF:DataStructuresFunctions
+NumericDataStructure -> DSF:DataStructuresFunctions
+
+CharExpression -> CharLiteral NotConcatenationString | CharVariable NotConcatenationString | CharAtFunction | CharDataStructure
+CharAtFunction -> strVariableAccessExpression "." CharAtToken "(" _ IntExpression _ ")"
+
+StringExpression -> StringLiteral NotConcatenationString | StringVariable NotConcatenationString | StringConcatenation
+  | StringDataStructure
+NotConcatenationString -> !(_ "+")
+LeftHandStringConcatenation -> NumericLiteral | CharLiteral | BooleanLiteral | StringLiteral | StringVariable | VariableAccessExpression
+StringConcatenation -> (LeftHandStringConcatenation _ (_ "+" _ LeftHandStringConcatenation)+ _)
+
+LeftHandSideNumericExpression -> NumericLiteral | IntVariable | FloatVariable
+  | SpecialNumericFunctions | VariablesNumericFunctions | NumericDataStructure 
+  | "(" _ NumericExpression _ ")" 
+MultiplicativeNumericExpression -> (LeftHandSideNumericExpression) (_ MultiplicativeOperator _ LeftHandSideNumericExpression)*
+MultiplicativeOperator -> $("*") | $("/") | $("%")
+NumericExpression -> MultiplicativeNumericExpression (_ AdditiveOperator _ MultiplicativeNumericExpression)*
+IntExpression "expresión entera" -> NumericExpression
+AdditiveOperator -> $("+") | $("-")
+
+RelationalExpression -> NumericExpression (_ RelationalOperator _ NumericExpression)+
+RelationalOperator -> "<=" | ">=" | $("<") | $(">")
+LeftHandSideEqualityLogExpression -> BooleanLiteral | BooleanVariable | SpecialBooleanFunctions
+  | "(" _ BooleanExpression _ ")"
+  | RelationalExpression
+  | BooleanDataStructure
+  | NotToken _ BooleanExpression 
+EqualityExpression -> (LeftHandSideEqualityLogExpression) (_ EqualityOperator _ LeftHandSideEqualityLogExpression)* 
+  | (NumericExpression) (_ EqualityOperator _ NumericExpression)+
+  | (StringExpression) (_ EqualityOperator _ (StringExpression))+
+  | (CharExpression) (_ EqualityOperator _ (CharExpression))+
+  | "(" _ EqualityExpression _ ")"
+EqualityOperator -> "==" | "!="
+LogicalANDExpression -> EqualityExpression (_ LogicalANDOperator _ EqualityExpression)*
+LogicalANDOperator -> "and"i
+BooleanExpression -> LogicalANDExpression (_ LogicalOROperator _ LogicalANDExpression)*
+LogicalOROperator -> "or"i
+
+//--- Funciones especiales (Booleanas)
+SpecialBooleanFunctions -> DSIsEmptyFunction | DSContainsFunction | StringContainsFunction
+DSIsEmptyFunction -> DSVariableAccessExpression "." IsEmptyToken
+DSContainsFunction -> DSVariableAccessExpression "." ContainsToken "(" Expression ")"
+StringContainsFunction -> strVariableAccessExpression "." ContainsToken "(" StringExpression ")"
+
+//--- Funciones especiales (Numéricas) --- 
+SpecialNumericFunctions -> FloorFunction | CeilingFunction | CastingIntFunction | InfinityLiteral | PowFunction | SqrtFunction | AbsoluteValueFunction
+VariablesNumericFunctions -> StringLengthFunction | ArrayLengthFunction | SizeFunction | IndexFunction
+FloorFunction -> PisoToken "(" _ NumericExpression _ ")"
+CeilingFunction -> TechoToken "(" _ NumericExpression _ ")"
+PowFunction -> PowToken "(" NumericExpression "," NumericExpression ")" 
+SqrtFunction -> SqrtToken "(" NumericExpression ")"
+AbsoluteValueFunction -> AbsoluteToken "(" _ NumericExpression _")"
+CastingIntFunction -> "(" _ IntToken _ ")" _ NumericExpression
+ArrayLengthFunction -> ArrVariableAccessExpression "." LengthToken
+StringLengthFunction -> strVariableAccessExpression "." LengthToken
+SizeFunction -> DSVariableAccessExpression  "." SizeToken
+IndexFunction -> ListVariableAccessExpression  "." IndexToken "(" Expression ")"
+
+//Llamado a un subprograma
+CallExpression -> SubProgramID Arguments
+SubProgramID -> Identifier "(" 
+Arguments -> _ (ArgumentList)? _ ")"
+ArgumentList -> (Expression (_ "," _ Expression)*)?
+
+//Llamado a una función
+FunctionCall -> CallExpression
+
+//LLamado a un procedimiento
+ProcedureCallStatement -> CallExpression
+
+// ----- Sentencias -----
+Statements -> (Statement (_f Statement)* _f)?
+Statement -> AssignmentStatement | IfStatement | IterationStatement | SwitchStatement | ProcedureCallStatement | BreakStatement | SpecialFunctions | ExpressionStatement
+
+BreakStatement -> BreakToken
+
+//Expresión y Sentencias
+ExpressionStatement -> RemovalListExpression | PopExpression | DequeueExpression
+
+// Asignación de variables
+AssignmentStatement -> VariableAccessExpression _ AssignmentOperator _ (Expression | FunctionCall)
+  | DSVariableAccessExpression "." PushToken "(" _ Expression ")" 
+  | DSVariableAccessExpression "." EnqueueToken "(" _ Expression ")"
+  | DSVariableAccessExpression "." AddToken "(" _ Expression ")" 
+  | DSVariableAccessExpression "." AddFirstToken "(" _ Expression ")"
+  | DSVariableAccessExpression "." AddLastToken "(" _ Expression ")"
+
+AssignmentOperator -> "<-" !"<-"
+
+//Condicionales
+IfStatement -> IfToken _ "(" _ BooleanExpression _ ")" _ ThenToken _f Statements ElseToken _f Statements EndIfToken
+  | IfToken _ "(" _ BooleanExpression _ ")" _ ThenToken _f Statements EndIfToken 
+
+SwitchStatement -> CaseOfToken _ Exp:Expression _f
+  ((BooleanLiteral | CharLiteral | StringLiteral | NumericLiteral) ":" _f Statements)*
+  (DefaultToken ":" _f Statements)? EndCaseToken 
+
+//Iterativos
+IterationStatement -> RepeatToken _f
+    Statements
+    UntilToken _ "(" _ BooleanExpression _ ")"
+  | WhileToken _ "(" _ BooleanExpression _ ")" _ DoToken _f
+    Statements EndWhileToken
+  | ForToken _ VarDeclarationFor _ FinalFor _ DoToken _f Statements EndForToken
+
+VarDeclarationFor -> IntVariable _ AssignmentOperator _ IntExpression
+FinalFor -> ToToken _ IntExpression (_ IncToken _ IntLiteral)? 
+| DownToToken _ IntExpression (_ IncToken _ IntLiteral)?
+
+//Funciones especiales
+SpecialFunctions -> SwapFunction | PrintFunction | ShowFunction
+SwapFunction -> SwapToken "(" _ VariableForSwap _ "," _ VariableForSwap _ ")"
+PrintFunction -> PrintToken "(" _ Expression _ ")"
+ShowFunction -> ShowToken "(" _ Expression _ ")"
+VariableForSwap -> ExistingVariable (!"[" | ArrayIndex)
+
+//Declaración de Variables (LOCALES)
+VariableStatement -> VarToken _f VariableDeclaration* 
+
+//Declaración de Variables (GLOBALES)
+VariableGlobalStatement -> VarToken _f "{" _f VariableDeclaration* "}" _f 
+
+VariableDeclaration -> PrimitiveTypesVar _ IdentifierList _ (AssignmentOperator _ valExp:(
+    CharExpression 
+  | StringExpression 
+  | BooleanExpression 
+  | IntExpression 
+  | NumericExpression))? _f 
+| PrimitiveTypesVar arrayD:ArrayIndex _ IdentifierList _ (AssignmentOperator _ valExp:(
+    ArrayLiteralChar 
+  | ArrayLiteralString 
+  | ArrayLiteralBoolean 
+  | ArrayLiteralInt 
+  | ArrayLiteralFloat))? _f
+| PilaToken "<" _ PrimitiveTypesVar _ ">" _ IdentifierList _f
+| ColaToken "<" _ PrimitiveTypesVar _ ">" _ IdentifierList _f
+| ListaToken "<" _ PrimitiveTypesVar _ ">" _ IdentifierList _f
+
+IdentifierList -> Identifier _ (_","_ Identifier)*
+
+ArrayIndex -> ("[" _ arrayId:IntExpression _ "]")+
+
+ArrayLiteralInt -> "[" ArrayLiteralInt (_ "," _ ArrayLiteralInt)* "]" 
+  | LiteralIntList
+
+LiteralIntList -> "[" IntLiteral (_ "," _ (IntLiteral))* "]" 
+ArrayLiteralFloat -> "[" ArrayLiteralFloat (_ "," _ ArrayLiteralFloat)* "]" | LiteralFloatList
+LiteralFloatList -> "[" NumericLiteral (_ "," _ (NumericLiteral))* "]" 
+ArrayLiteralChar -> "[" ArrayLiteralChar (_ "," _ ArrayLiteralChar)* "]" | LiteralCharList
+LiteralCharList -> "[" CharLiteral (_ "," _ (CharLiteral))* "]" 
+ArrayLiteralString -> "[" ArrayLiteralString (_ "," _ ArrayLiteralString)* "]" | LiteralStringList
+LiteralStringList -> "[" StringLiteral (_ "," _ (StringLiteral))* "]" 
+ArrayLiteralBoolean -> "[" ArrayLiteralBoolean (_ "," _ ArrayLiteralBoolean)* "]" | LiteralBooleanList
+LiteralBooleanList -> "[" BooleanLiteral (_ "," _ (BooleanLiteral))* "]" 
+
+//Variables a visualizar dinámicamente
+showVarsFunction -> ShowVarsToken _ (ExistingVariableId _ (_","_ ExistingVariableId)*)? __
+
+// Retorno
+ReturnStatement -> ReturnToken _ Expression
+
+// ----- Funciones, Procedimientos y Programas -----
+SubProgramDeclaration -> 
+  SkipToken? _ FunctionToken _ TypesVar _ SubProgramCreationID "(" _ FormalParameterList _ ")"
+  __ VariableStatement? showVarsFunction?
+  "{" _f Statements ReturnStatement _f "}"
+  | 
+  SkipToken? _ ProcedureToken _ SubProgramCreationID "(" _ FormalParameterList _ ")"
+  __ VariableStatement? showVarsFunction?
+  "{" _f Statements "}"
+
+SubProgramCreationID -> Identifier
+
+FormalParameterList -> (Parameter (__ "," __ Parameter)*)?
+Parameter -> ModePar _ TypesVar _ Identifier

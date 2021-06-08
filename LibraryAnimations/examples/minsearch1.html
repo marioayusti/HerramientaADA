@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Minsearch</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+        var init = function () {
+
+            var stage = new inalan.Stage("myCanvas");
+            stage.showAllButtons();
+
+            var min = new inalan.VisuVariable("min", 0, false);
+            min.x = 45;
+            min.y = 220;
+            stage.add(min, "min");
+
+            var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0, 0, 0], true);
+            a.setMinValue(5);
+            a.randomize(30, 150);
+            a.x = 100;
+            a.y = 220;
+            stage.add(a, "a");
+
+            var label = new inalan.VisuLabel(["This animation shows how to find the minimum in an array. In the beginning, we copy the first element",
+                                          "of the array to the minimum. Next, we compare the minimum with every other element in the array.",
+                                          "If any of the compared element in the array is smaller than the minimum, we copy it to the minimum."]);
+            label.x = 30;
+            label.y = 330;
+            stage.add(label, "label")
+
+            var c = new inalan.VisuCode(["min = a[0]",
+                                         "FOR i = 1 to 6",
+                                         "   IF min > a[i] THEN",
+                                         "      min = a[i]"]);
+            c.x = 360;
+            c.y = 70;
+            stage.add(c, "code"); // in code we can refer to is with id = "code"
+
+            // **********************************************
+
+            // global vars used in functions (for undo function need to be stored in stage.var object) ...
+            stage.vars.index = 0;
+
+            // functions (steps of the animation) ...
+            var findMinFirstStep = function () {
+                stage.get("code").selected = [0];
+                stage.copy(stage.get("a")[0], stage.get("min"));
+            }
+
+            var findMinIncrease = function () {
+                stage.vars.index++;
+                stage.get("a").setIndex("i", stage.vars.index);
+                stage.get("a").setLoopMarker("i", 1, 6);
+                if (findMinCheck()) {
+                    stage.get("code").selected = [1];
+                    return 200;
+                } else {
+                    return 0;
+                }
+            }
+
+            var findMinCompare = function () {
+                stage.get("code").selected = [2];
+                stage.compare(stage.get("min"), stage.get("a")[stage.vars.index]);
+            }
+
+            var findMinCopy = function () {
+                if (stage.get("min").value > stage.get("a")[stage.vars.index].value) {
+                    stage.get("code").selected = [3];
+                    stage.copy(stage.get("a")[stage.vars.index], stage.get("min"));
+                } else {
+                    return 0;
+                }
+            }
+
+            var findMinCheck = function () {
+                return stage.vars.index < stage.get("a").length;
+            }
+
+            var findMinFinalStep = function () {
+                stage.get("code").selected = [];
+                stage.get("a").deleteIndex("i");
+            }
+
+            // defining steps in animation...
+            stage.setSteps([
+                findMinFirstStep,
+                findMinIncrease,
+                [findMinCompare, findMinCopy, findMinIncrease], findMinCheck,
+                findMinFinalStep
+            ]);
+
+        }
+
+    </script>
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="480" style="border:1px solid black"></canvas>
+
+</body>
+</html>

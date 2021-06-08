@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Simplesort</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+    var init = function () {
+
+        var stage = new inalan.Stage("myCanvas");
+        stage.showAllButtons();     
+
+        var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0, 0, 0], true);
+        a.setMinValue(5);
+        a.randomize(30, 150);
+        a.x = 80;
+        a.y = 220;
+        stage.add(a, "a");
+
+        var label = new inalan.VisuLabel(["This animation shows the simplesort sorting algorithm. We compare every element with every other",
+                                          "element located behind it. If the compared elements are not in ascending order, we swap them."]);
+        label.x = 30;
+        label.y = 350;
+        stage.add(label, "label")
+
+        var c = new inalan.VisuCode(["FOR i = 0 to 5",
+                                     "   FOR j = i+1 to 6",
+                                     "      IF a[i] > a[j] THEN",
+                                     "         swap a[i] a[j]"]);
+        c.x = 320;
+        c.y = 60;
+        stage.add(c, "code"); // in code we can refer to this with id = "code"
+
+        // **********************************************
+
+        // functions (steps of the animation) ...
+        // global vars need to be stored in stage.vars object...
+
+        var setI = function () {
+            stage.vars.i = 0;
+            stage.get("code").selected = [0];
+            stage.get("a").setIndex("i", stage.vars.i, 0);
+            stage.get("a").setLoopMarker("i", 0, 5);
+            return 200;
+        }
+
+        var setJ = function () {
+            stage.vars.j = stage.vars.i + 1;
+            stage.get("code").selected = [1];
+            stage.get("a").setIndex("j", stage.vars.j, 1);
+            stage.get("a").setLoopMarker("j", stage.vars.j, 6);
+            return 200;
+        }
+
+        var compare = function () {
+            stage.get("code").selected = [2];
+            stage.compare(stage.get("a")[stage.vars.i], stage.get("a")[stage.vars.j]);
+        }
+
+        var swap = function () {
+            if (stage.get("a")[stage.vars.i].value > stage.get("a")[stage.vars.j].value) {
+                stage.get("code").selected = [3];
+                for (var k = stage.vars.i; k <= stage.vars.j; k++) {
+                    stage.get("a")[k].minValue = stage.get("a")[stage.vars.j].value;
+                }
+                stage.swap(stage.get("a")[stage.vars.i], stage.get("a")[stage.vars.j]);
+            } else {
+                stage.get("a")[stage.vars.j].minValue = stage.get("a")[stage.vars.i].value;
+                return 0;
+            }
+        }
+
+        var incI = function () {
+            stage.get("a")[stage.vars.i].setGreenColor();
+            stage.vars.i++;
+            if (checkI()) {
+                stage.get("code").selected = [0];
+                stage.get("a").setIndex("i", stage.vars.i, 0);
+                return 200;
+            } else {
+                stage.get("a")[stage.vars.i].setGreenColor();
+                stage.get("a")[stage.vars.i].changeable = false;
+                stage.get("a").deleteIndex("i");
+                return 0;
+            }
+        }
+
+        var incJ = function () {
+            stage.vars.j++;
+            if (checkJ()) {
+                stage.get("code").selected = [1];
+                stage.get("a").setIndex("j", stage.vars.j, 1);
+                return 200;
+            } else {
+                stage.get("a").deleteIndex("j");
+                return 0;
+            }
+        }
+
+        var makeJChangeable = function () {
+            stage.get("a")[stage.vars.j].changeable = true;
+            return 0;
+        }
+
+        var checkI = function () {
+            return stage.vars.i < stage.get("a").length - 1;
+        }
+
+        var checkJ = function () {
+            return stage.vars.j < stage.get("a").length;
+        }
+
+        var finalStep = function () {
+            stage.get("code").selected = [];
+        }
+
+        // defining steps in animation...
+        stage.setSteps([
+            setI,
+            [
+                setJ,
+                [
+                    compare,
+                    swap,
+                    makeJChangeable,
+                    incJ
+                ], checkJ,
+                incI
+            ], checkI,
+            finalStep
+        ]);
+
+    }
+
+    </script>
+
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="480" style="border:1px solid black"></canvas>
+
+</body>
+</html>

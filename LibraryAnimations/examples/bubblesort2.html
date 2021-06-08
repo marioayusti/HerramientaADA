@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Bubblesort</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+    var init = function () {
+
+        var stage = new inalan.Stage("myCanvas");
+        stage.showAllButtons();
+
+        var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0, 0, 0], true);
+        a.setMinValue(5);
+        a.randomize(30, 150);
+        a.x = 80;
+        a.y = 220;
+        stage.add(a, "a");
+
+        var label = new inalan.VisuLabel(["This animation shows an improved bubblesort algorithm. In this algorithm, we remember the",
+                                          "place of the last swap (ch) after each iterration. In next iteration we don't check again those",
+                                          "elements, which are already in sorted order (on the right from the place of the last swap)."]);
+        label.x = 30;
+        label.y = 370;
+        stage.add(label, "label")
+
+        var c = new inalan.VisuCode(["i = 6",
+                                     "WHILE i >= 1",
+                                     "   ch = -1",
+                                     "   FOR j = 0 to i-1",
+                                     "      IF a[j] > a[j+1] THEN",
+                                     "         swap a[j] a[j+1]",
+                                     "         ch = j",
+                                     "   i = ch"]);
+        c.x = 320;
+        c.y = 50;
+        stage.add(c, "code"); // in code we can refer to this with id = "code"
+
+        // **********************************************
+
+        // functions (steps of the animation) ...
+        // global vars need to be stored in stage.vars object...
+
+        var setI = function () {
+            stage.vars.i = 6;
+            stage.get("code").selected = [0];
+            stage.get("a").setIndex("i", stage.vars.i, 0);            
+            return 200;
+        }
+
+        var beginWhile = function () {
+            stage.get("code").selected = [1];
+            stage.get("a").setLoopMarker("i", 6, 1);
+            return 200;
+        }
+
+        var setCh = function () {
+            stage.vars.ch = -1;
+            stage.get("code").selected = [2];
+            stage.get("a").setIndex("ch", stage.vars.ch, 2);
+            return 200;
+        }
+
+        var setJ = function () {
+            stage.vars.j = 0;
+            stage.get("code").selected = [3];
+            stage.get("a").setIndex("j", stage.vars.j, 1);
+            stage.get("a").setLoopMarker("j", 0, stage.vars.i - 1);
+            return 200;
+        }
+
+        var compare = function () {
+            stage.get("code").selected = [4];
+            stage.get("a").setIndex("j+1", stage.vars.j + 1, 1);
+            stage.compare(stage.get("a")[stage.vars.j], stage.get("a")[stage.vars.j+1]);
+        }
+
+        var swap = function () {
+            if (stage.get("a")[stage.vars.j].value > stage.get("a")[stage.vars.j + 1].value) {
+                stage.vars.swap = true;
+                stage.get("code").selected = [5];
+                stage.swap(stage.get("a")[stage.vars.j], stage.get("a")[stage.vars.j+1]);
+            } else {
+                stage.vars.swap = false;
+                return 0;
+            }
+        }
+
+        var changeCh = function () {
+            if (stage.vars.swap) {
+                stage.vars.ch = stage.vars.j;
+                stage.get("code").selected = [6];
+                stage.get("a").setIndex("ch", stage.vars.ch, 2);
+                for (var k = 0; k <= stage.vars.ch; k++) {
+                    stage.get("a")[k].maxValue = stage.get("a")[stage.vars.j + 1].value;
+                    stage.get("a")[k].changeable = true;
+                }
+                return 200;
+            } else {
+                return 0;
+            }
+        }
+
+        var decI = function () {
+            for (var k = stage.vars.ch + 1; k <= stage.vars.i; k++) {
+                stage.get("a")[k].setGreenColor();
+                stage.get("a")[k].changeable = false;
+            }
+            stage.vars.i = stage.vars.ch;
+            stage.get("code").selected = [7];
+            stage.get("a").setIndex("i", stage.vars.i, 0);
+            return 200;            
+        }
+
+        var incJ = function () {
+            stage.get("a").deleteIndex("j+1");
+            stage.vars.j++;
+            if (checkJ()) {
+                stage.get("code").selected = [3];
+                stage.get("a").setIndex("j", stage.vars.j, 1);
+                return 200;
+            } else {
+                stage.get("a").deleteIndex("j");                
+                return 0;
+            }
+        }
+
+        var checkI = function () {
+            return stage.vars.i >= 1;
+        }
+
+        var checkJ = function () {
+            return stage.vars.j < stage.vars.i;
+        }
+
+        var finalStep = function () {
+            stage.get("a")[0].setGreenColor();
+            stage.get("a")[0].changeable = false;
+            stage.get("code").selected = [];
+            stage.get("a").deleteIndex("i");
+            stage.get("a").deleteIndex("ch");            
+        }
+
+        // defining steps in animation...
+        stage.setSteps([
+            setI,
+            [
+                beginWhile,
+                setCh,
+                setJ,
+                [                    
+                    compare,
+                    swap,
+                    changeCh,
+                    incJ
+                ], checkJ,
+                decI
+            ], checkI,
+            finalStep
+        ]);
+
+    }
+
+    </script>
+
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="520" style="border:1px solid black"></canvas>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css" />
+    <script src="../assets/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <!-- jqueury stuff.  Only used for the animation speed slider. -->
+    <link rel="stylesheet" href="../JavascriptVisualRelease/ThirdParty/jquery-ui-1.8.11.custom.css">
+    <link rel="stylesheet" href="../assets/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/css/estilos.css" />
+    <script src="../JavascriptVisualRelease/ThirdParty/jquery-1.5.2.min.js"></script>
+    <script src="../JavascriptVisualRelease/ThirdParty/jquery-ui-1.8.11.custom.min.js"></script>
+
+    <!-- Librerías para las animaciones -->
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/CustomEvents.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/UndoFunctions.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/AnimatedObject.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/AnimatedLabel.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/AnimatedCircle.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/AnimatedRectangle.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/AnimatedLinkedList.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/HighlightCircle.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/Line.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/ObjectManager.js"> </script>
+    <script type="text/javascript" src="../JavascriptVisualRelease/AnimationLibrary/AnimationMain.js"> </script>
+
+    <script type="text/javascript" src="../JavascriptVisualRelease/AlgorithmLibrary/Algorithm.js"> </script>
+    <script src="../assets/js/SortView.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/matrizView.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/stackView.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../assets/js/queueView.js" type="text/javascript" charset="utf-8"></script>
+</head>
+
+<body>
+
+    <div id="algoControlSection" style="display: none">
+        <table id="AlgorithmSpecificControls"> </table>
+    </div>
+
+    <div id="wrapVariables" class="d-flex align-content-start flex-wrap"></div>
+
+    <!-- <button onclick="drawMatriz()">CreateMatriz</button>
+    <button onclick="drawCell(1,1)">DrawMatriz</button>
+    <button onclick="createCanvas('canvas')">Canv1</button>
+    <button onclick="createCanvas('canvas2')">Canv2</button>
+    <button onclick="createCanvas('canvas3')">Canv3</button>
+    <button onclick="createCanvas('canvas4')">Canv4</button>
+    <button onclick="removeViewContent('canvas')">Rm Cv1</button> -->
+    
+    <!-- <button onclick="setIndexBar(1,'i')">setIndexBar</button>
+    <button onclick="setIndexBar(2,'j')">setIndexBar</button>
+    <button onclick="clearIndexBar(1)">clear 1</button>
+
+    <button onclick="barColorChange(1)">barColorChange 1</button>
+    <button onclick="barColorChange(2)">barColorChange 1</button>
+    <button onclick="resetAllBarColorChange()">reset color</button>
+    -->
+    <!-- <button onclick="swap(1,2)">swap</button> -->
+    <!-- <button onclick="clearAllDivs()">Clear</button> -->
+    <!-- <button onclick="addVisibleVariable('as',65)">AddVariable</button>
+    <button onclick="addVisibleVariable('dd',2)">AddVariable</button>
+    <button onclick="removeVisibleVariable('as')">removeVisibleVariable</button> -->
+
+    <!----------------------------------STACK----------------------------------------->
+    <!-- <button onclick="createCanvasStack('testId')">Create stack</button>
+    <button onclick="pushStack(5)">Push 5</button>
+    <button onclick="popStack()">Pop</button>
+    <button onclick="clearStack()">ClearAll</button>
+    <button onclick="removeStack('testId')">removeStack</button> -->
+    <!----------------------------------END STACK----------------------------------------->
+
+    <!----------------------------------QUEUE----------------------------------------->
+    <!-- <button onclick="createCanvasQueue('testId')">Create queue</button>
+    <button onclick="enqueueCall(5)">Enqueue queue 5</button>
+    <button onclick="dequeueCall()">Dequeue queue</button>
+    <button onclick="clearQueue()">Clear queue</button>
+    <button onclick="removeQueue('testId')">removeQueue</button> -->
+    <!----------------------------------END QUEUE----------------------------------------->
+
+    <div id="wrapContent" class="d-flex align-content-start flex-wrap"></div>
+
+</body>
+
+</html>

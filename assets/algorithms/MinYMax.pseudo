@@ -1,0 +1,26 @@
+procedure minYMax(ES int[] arreglo, e int n, es int min, es int max)
+var
+int i,j
+float x,y
+char c
+{
+    min <- arreglo[1]
+    max <- arreglo[1]
+    for i<-2 to n do
+        if (arreglo[i] < min) then
+            min <- arreglo[i]
+        else
+            if (arreglo[i]>max) then
+                max<-arreglo[i]
+            endif
+        endif
+    endfor
+}
+
+procedure main()
+var
+int[5] arreglo<-[2,3,4,5,5]
+int min, max
+{
+    minYMax(arreglo,arreglo.len,min,max)
+}

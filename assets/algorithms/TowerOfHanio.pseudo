@@ -1,0 +1,17 @@
+/*--- Algoritmo para el problema de las torres de Hanoi ---*/
+
+procedure tH(E int n, E char o, E char a, E char d) 
+{
+    if (n == 1) then
+        print("mover un disco de " + o + " al " + d)
+    else
+        tH(n-1, o, d, a)
+        print("mover un disco de " + o + " al " + d)
+        tH(n-1, a, o, d)
+    endif
+}
+
+procedure main()
+{
+    tH(4, 'A', 'B', 'C')
+}

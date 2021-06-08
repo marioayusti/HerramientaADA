@@ -1,0 +1,492 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Mergesort</title>
+
+    <script src="../build/inalan20150903.js"></script>
+
+    <script>
+
+        var init = function () { 
+
+            var stage = new inalan.Stage("myCanvas");
+            stage.showAllButtons();
+
+            var a = new inalan.VisuArray("a", [0, 0, 0, 0, 0, 0, 0, 0], true);
+            a.setMinValue(5);
+            a.setHeight(100);
+            a.randomize(30, 70);
+            a.x = 80;
+            a.y = 140;
+            stage.add(a, "a");
+
+            var x = new inalan.VisuArray("x", [0, 0, 0, 0, 0, 0, 0, 0], false);
+            x.setHeight(100);
+            x.x = 80;
+            x.y = 420;
+            stage.add(x, "x");
+
+            var label = new inalan.VisuLabel(["This animation shows how mergesort works. First, we devide the array to two parts, then to another",
+                                              "two parts, until we get parts with one element only. These 1-element parts are sorted. Next, we",
+                                              "merge these 1-element parts to a 2-element part. When we have two sorted 2-element parts, we",
+                                              "merge them to a 4-element part. Finally, we merge the two 4-element parts to get the sorted array."]);
+            label.x = 30;
+            label.y = 540;
+            stage.add(label, "label")
+
+            var c = new inalan.VisuCode(["MERGESORT (beg=0, end=7):",
+                                         "",
+                                         "   IF beg < end THEN",
+                                         "      m = (beg+end)/2",
+                                         "      MERGESORT (beg, m)",
+                                         "      MERGESORT (m+1, end)",
+                                         "      FOR i = beg TO m",
+                                         "         x[i] = a[i]",
+                                         "      FOR i = m+1 TO end",
+                                         "         j = end + m+1 - i",
+                                         "         x[j] = a[i]",
+                                         "      i = beg",
+                                         "      j = end",
+                                         "      FOR k = beg TO end",
+                                         "         IF x[i] < x[j] THEN",
+                                         "            a[k] = x[i]",
+                                         "            increase i",
+                                         "         ELSE",
+                                         "            a[k] = x[j]",
+                                         "            decrease j"]);
+            c.x = 330;
+            c.y = 40;
+            stage.add(c, "code"); // in code we can refer to it with id = "code"
+
+            // **********************************************
+
+            stage.vars.saved = [];
+
+            stage.vars.beg = 0;
+            stage.vars.end = 7;
+
+            var line0 = function () {
+                stage.get("code").selected = [0];
+                stage.get("a").deleteAllIndexes();
+                if (stage.vars.beg > 0 || stage.vars.end < 7) {
+                    stage.get("a").setMarker(stage.vars.oldBeg, stage.vars.oldEnd, "#EBB");
+                }
+                stage.get("a").setIndex("beg", stage.vars.beg);
+                stage.get("a").setIndex("end", stage.vars.end);
+                stage.get("a").setMarker(stage.vars.beg, stage.vars.end, "#000");
+                return 200;
+            }
+
+            var line1 = function () {
+                stage.get("code").selected = [2];
+                stage.vars.line1if = stage.vars.beg < stage.vars.end;
+                return 200;
+            }
+
+            var line2 = function () {
+                if (stage.vars.line1if) {
+                    stage.get("code").selected = [3];
+                    stage.vars.m = Math.floor((stage.vars.beg + stage.vars.end) / 2);
+                    stage.get("a").setIndex("m", stage.vars.m);
+                    stage.get("a").setIndex("m+1", stage.vars.m + 1);
+                    return 200;
+                } else {
+                    stage.get("a")[stage.vars.beg].setGreenColor();
+                    return 0;
+                }
+            }
+
+            var line3 = function () {
+                if (stage.vars.line1if) {
+                    stage.get("code").selected = [4];
+                } else {
+                    return 0;
+                }
+            }
+
+            var recCall1 = function () {
+                if (stage.vars.line1if) {
+                    // save variables
+                    var n = stage.vars.saved.length;
+                    stage.vars.saved[n] = new Array();
+                    stage.vars.saved[n][0] = stage.vars.beg;
+                    stage.vars.saved[n][1] = stage.vars.end;
+                    stage.vars.saved[n][2] = stage.vars.m;
+                    stage.vars.saved[n][3] = stage.vars.line1if;
+                    stage.vars.saved[n][4] = 1; // 1st recursive call
+                    // set new values for recursive call
+                    stage.vars.oldBeg = stage.vars.beg;
+                    stage.vars.oldEnd = stage.vars.end;
+                    stage.vars.end = stage.vars.m;
+                    var newLines = stage.get("code").lines.slice();
+                    newLines[0] = "MERGESORT (beg=" + stage.vars.beg + ", end=" + stage.vars.end + "):";
+                    stage.get("code").functionCall(newLines);
+                }
+                return 0;
+            }
+
+            var recCheck1 = function () {
+                return stage.vars.line1if;
+            }
+
+            var recReturn = function () {
+                // save variables
+                var n = stage.vars.saved.length - 1;
+                if (n >= 0) {
+                    stage.vars.recBack = true;
+                    stage.vars.oldBeg = stage.vars.beg;
+                    stage.vars.oldEnd = stage.vars.end;
+                    // load variables
+                    stage.vars.beg = stage.vars.saved[n][0];
+                    stage.vars.end = stage.vars.saved[n][1];
+                    stage.vars.m = stage.vars.saved[n][2];
+                    stage.vars.line1if = stage.vars.saved[n][3];
+                    stage.vars.which = stage.vars.saved[n][4];
+                    stage.vars.saved = stage.vars.saved.slice(0, n);
+                    // code animation
+                    stage.get("code").functionReturn();
+                } else {
+                    stage.vars.recBack = false;
+                }
+                return 0;
+            }
+
+            var setIndexes = function () {
+                if (stage.vars.recBack) {
+                    stage.get("a").setMarker(stage.vars.oldBeg, stage.vars.oldEnd, "#9C9");
+                    stage.get("a").setMarker(stage.vars.beg, stage.vars.end, "#000");
+                    stage.get("a").setIndex("beg", stage.vars.beg);
+                    stage.get("a").setIndex("end", stage.vars.end);
+                    stage.get("a").setIndex("m", stage.vars.m);
+                    stage.get("a").setIndex("m+1", stage.vars.m + 1);
+                    // set every element to red
+                    for (var i = 0; i < stage.get("a").length; i++) {
+                        stage.get("a")[i].setDefaultColor();
+                    }
+                } else {
+                    return 0;
+                }
+            }
+
+            var line4 = function () {
+                if (stage.vars.line1if && stage.vars.which == 1) {
+                    stage.get("code").selected = [5];
+                } else {
+                    return 0;
+                }
+            }
+
+            var recCall2 = function () {
+                if (stage.vars.line1if && stage.vars.which == 1) {
+                    // save variables
+                    var n = stage.vars.saved.length;
+                    stage.vars.saved[n] = new Array();
+                    stage.vars.saved[n][0] = stage.vars.beg;
+                    stage.vars.saved[n][1] = stage.vars.end;
+                    stage.vars.saved[n][2] = stage.vars.m;
+                    stage.vars.saved[n][3] = stage.vars.line1if;
+                    stage.vars.saved[n][4] = 2; // 2nd recursive call
+                    // set new values for recursive call
+                    stage.vars.oldBeg = stage.vars.beg;
+                    stage.vars.oldEnd = stage.vars.end;
+                    stage.vars.beg = stage.vars.m + 1;
+                    var newLines = stage.get("code").lines.slice();
+                    newLines[0] = "MERGESORT (beg=" + stage.vars.beg + ", end=" + stage.vars.end + "):";
+                    stage.get("code").functionCall(newLines);
+                }
+                return 0;
+            }
+
+            var recCheck2 = function () {
+                return stage.vars.which == 1;
+            }
+
+            var recCheck3 = function () {
+                return stage.vars.which == 2 && stage.vars.saved.length > 0;
+            }
+
+            var recCheck4 = function () {
+                return stage.vars.saved.length > 0 || stage.vars.which == 1;
+            }
+
+            var beginForI_1 = function () {
+                stage.vars.i = stage.vars.beg;
+                return 0;
+            }
+
+            var line5 = function () {
+                stage.get("code").selected = [6];
+                if (stage.vars.beg == stage.vars.m || stage.vars.m + 1 == stage.vars.end) {
+                    stage.get("a").setIndex("i", stage.vars.i, 2);
+                } else {
+                    stage.get("a").setIndex("i", stage.vars.i, 1);
+                }
+                stage.get("a").setLoopMarker("i", stage.vars.beg, stage.vars.m);
+                stage.get("x").setIndex("i", stage.vars.i, 0);
+                stage.get("x").setLoopMarker("i", stage.vars.beg, stage.vars.m);
+                return 200;
+            }
+
+            var line6 = function () {
+                stage.get("code").selected = [7];
+                stage.move(stage.get("a")[stage.vars.i], stage.get("x")[stage.vars.i]);
+            }
+
+            var incI = function () {
+                if ((stage.vars.i == stage.vars.beg && stage.vars.i == stage.vars.m)
+                    || (stage.vars.i == stage.vars.m + 1 && stage.vars.i == stage.vars.end)) {
+                    stage.get("x")[stage.vars.i].changeable = true;
+                }
+                stage.vars.i++;
+                return 0;
+            }
+
+            var endForI_1 = function () {
+                return stage.vars.i <= stage.vars.m;
+            }
+
+            var beginForI_2 = function () {
+                stage.get("x").deleteIndex("i");
+                stage.vars.i = stage.vars.m + 1;
+                return 0;
+            }
+
+            var line7 = function () {
+                stage.get("code").selected = [8];
+                if (stage.vars.beg == stage.vars.m || stage.vars.m + 1 == stage.vars.end) {
+                    stage.get("a").setIndex("i", stage.vars.i, 2);
+                } else {
+                    stage.get("a").setIndex("i", stage.vars.i, 1);
+                }
+                stage.get("a").setLoopMarker("i", stage.vars.m + 1, stage.vars.end);
+                return 200;
+            }
+
+            var line8 = function () {
+                stage.get("code").selected = [9];
+                stage.vars.j = stage.vars.end + stage.vars.m + 1 - stage.vars.i;
+                stage.get("x").setIndex("j", stage.vars.j, 0);
+                stage.get("x").setLoopMarker("j", stage.vars.end, stage.vars.m + 1, true);
+                return 200;
+            }
+
+            var line9 = function () {
+                stage.get("code").selected = [10];
+                stage.move(stage.get("a")[stage.vars.i], stage.get("x")[stage.vars.j]);
+            }
+
+            var endForI_2 = function () {
+                return stage.vars.i <= stage.vars.end;
+            }
+
+            var line10 = function () {
+                stage.get("code").selected = [11];
+                stage.get("a").deleteIndex("i");
+                stage.get("x").deleteIndex("j");
+                stage.vars.i = stage.vars.beg;
+                stage.get("x").setIndex("i", stage.vars.i, 0);
+                stage.get("x").setLoopMarker("i", stage.vars.beg, stage.vars.m);
+                return 200;
+            }
+
+            var line11 = function () {
+                stage.get("code").selected = [12];
+                stage.vars.j = stage.vars.end;
+                stage.get("x").setIndex("j", stage.vars.j, 1);
+                stage.get("x").setLoopMarker("j", stage.vars.end, stage.vars.m + 1, true);
+                return 200;
+            }
+
+            var beginForK = function () {
+                stage.vars.k = stage.vars.beg;
+                return 0;
+            }
+
+            var line12 = function () {
+                stage.get("code").selected = [13];
+                if (stage.vars.beg == stage.vars.m || stage.vars.m + 1 == stage.vars.end) {
+                    stage.get("a").setIndex("k", stage.vars.k, 2);
+                } else {
+                    stage.get("a").setIndex("k", stage.vars.k, 1);
+                }
+                stage.get("a").setLoopMarker("k", stage.vars.beg, stage.vars.end);
+                return 200;
+            }
+
+            var line13 = function () {
+                stage.get("code").selected = [14];
+                stage.compare(stage.get("x")[stage.vars.i], stage.get("x")[stage.vars.j]);
+            }
+
+            var line14 = function () {
+                stage.vars.line13if = stage.get("x")[stage.vars.i].value < stage.get("x")[stage.vars.j].value;
+                if (stage.vars.line13if) {
+                    stage.get("code").selected = [15];
+                    stage.move(stage.get("x")[stage.vars.i], stage.get("a")[stage.vars.k]);
+                } else {
+                    return 0;
+                }
+            }
+
+            var line15 = function () {
+                if (stage.vars.line13if) {
+                    stage.get("a")[stage.vars.k].setGreenColor();
+                    stage.get("code").selected = [16];
+                    stage.vars.i++;
+                    stage.get("x").setIndex("i", stage.vars.i, 0);
+                    return 200;
+                } else {
+                    return 0;
+                }
+            }
+
+            var line16 = function () {
+                if (!stage.vars.line13if) {
+                    stage.get("code").selected = [17];
+                    return 200;
+                } else {
+                    return 0;
+                }
+            }
+
+            var line17 = function () {
+                if (!stage.vars.line13if) {
+                    stage.get("code").selected = [18];
+                    stage.move(stage.get("x")[stage.vars.j], stage.get("a")[stage.vars.k]);
+                } else {
+                    return 0;
+                }
+            }
+
+            var line18 = function () {
+                if (!stage.vars.line13if) {
+                    stage.get("a")[stage.vars.k].setGreenColor();
+                    stage.get("code").selected = [19];
+                    stage.vars.j--;
+                    stage.get("x").setIndex("j", stage.vars.j, 1);
+                    return 200;
+                } else {
+                    return 0;
+                }
+            }
+
+            var incK = function () {
+                stage.vars.k++;
+                return 0;
+            }
+
+            var endForK = function () {
+                return stage.vars.k <= stage.vars.end;
+            }
+
+            var deleteIndexes = function () {
+                stage.get("x").deleteIndex("i");
+                stage.get("x").deleteIndex("j");
+                stage.get("a").deleteIndex("k");
+                return 0;
+            }
+
+            var finalStep = function () {
+                stage.get("a").deleteAllIndexes();
+                stage.get("code").selected = [];
+                stage.get("a").deleteAllMarkers();
+            }
+
+            // defining steps in animation...
+            stage.setSteps([
+                [
+                    [
+                        [
+                            line0,
+                            line1,
+                            line2,
+                            line3,
+                            recCall1 // 1st rec call
+                        ], recCheck1,
+                        recReturn, // back from rec call
+                        setIndexes,
+                        line4,
+                        recCall2 // 2nd rec call
+                    ], recCheck2,
+                    [
+                        // osszefesules...
+                        // (kisebb reszeket rekurziv fuggvenyekben)
+                        beginForI_1, // move first part to x
+                        [
+                            line5,
+                            line6,
+                            incI
+                        ], endForI_1,
+                        beginForI_2, // move second part to x
+                        [
+                            line7,
+                            line8,
+                            line9,
+                            incI
+                        ], endForI_2,
+                        line10, // move back to a
+                        line11,
+                        beginForK,
+                        [
+                            line12,
+                            line13,
+                            line14,
+                            line15,
+                            line16,
+                            line17,
+                            line18,
+                            incK
+                        ], endForK,
+                        deleteIndexes,
+                        // ...osszefesules vege
+                        recReturn, // back from rec call
+                        setIndexes,
+                    ], recCheck3,
+                    line4,
+                    recCall2 // 2nd rec call
+                ], recCheck4,
+                // osszefesules...
+                // (utolso ket nagy reszt a foprogramban)
+                beginForI_1, // move first part to x
+                [
+                    line5,
+                    line6,
+                    incI
+                ], endForI_1,
+                beginForI_2, // move second part to x
+                [
+                    line7,
+                    line8,
+                    line9,
+                    incI
+                ], endForI_2,
+                line10, // move back to a
+                line11,
+                beginForK,
+                [
+                    line12,
+                    line13,
+                    line14,
+                    line15,
+                    line16,
+                    line17,
+                    line18,
+                    incK
+                ], endForK,
+                deleteIndexes,
+                // ...osszefesules vege
+                finalStep
+            ]);
+
+        }
+
+    </script>
+
+
+</head>
+<body onload="init();">
+
+    <canvas id="myCanvas" width="700" height="710" style="border:1px solid black"></canvas>
+
+</body>
+</html>

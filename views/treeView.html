@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="../assets/css/bootstrap.min.css" />
+    <script src="../assets/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+    <title>Tree</title>
+
+    <style>
+	.card {
+  /* Add shadows to create the "card" effect */
+		box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+		transition: 0.3s;
+		display: none;
+	}
+
+	/* On mouse-over, add a deeper shadow */
+	.card:hover {
+		box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+	}
+
+	/* Add some padding inside the card container */
+	.container {
+		padding: 2px 16px;
+	}
+	.node {
+		cursor: pointer;
+	}
+
+	.node circle {
+	  fill: #fff;
+	  stroke: steelblue;
+	  stroke-width: 3px;
+	}
+
+	.node text {
+	  font: 12px sans-serif;
+	}
+
+	.link {
+	  fill: none;
+	  stroke: #ccc;
+	  stroke-width: 2px;
+	}
+	
+    </style>
+
+  </head>
+
+<body style="overflow-y: auto;">
+	<div id="divCard" class="card">
+		<div class="container">
+			<p id="textCard"></p> 
+		</div>
+	</div>
+
+	<!-- <button onclick="addCircle('TEST','subrutina',true)">Add</button>
+	<button onclick="addCircle('TEST','subrutina',false)">Add2</button>
+	<button onclick="disableCircle()">Disable</button>
+	<button onclick="resetTree()">resetTree</button>
+	<button onclick="devolverPaso()">devolver</button><br>-->
+	<div style="margin-left: 15px; margin-top: 15px; position: absolute;">
+		<img src="../assets/images/circle_blue.png"> <b>: Nodo abierto</b><br>
+		<img src="../assets/images/circle_gray.png"> <b>: Nodo cerrado</b><br>
+		<img src="../assets/images/circle_green.png"> <b>: Nodo actual</b><br>
+		<img src="../assets/images/circle_dotted.png"> <b>(Punteado): Nodo recursivo</b><br>
+	</div>
+	
+	<script src="../assets/js/d3js.min.js"></script>
+	<script src="../assets/js/treeJs.js" type="text/javascript" charset="utf-8"></script>
+	
+</body>
+</html>
